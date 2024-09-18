@@ -1,15 +1,18 @@
-from flask import Flask
-from apis import rick_and_mort_bp
+from flask import Flask, jsonify
+from apis.rick_and_morty import rick_and_morty_bp  # Correct import
+from flask_cors import CORS
 
-def create_app():
-    app = Flask(__name__)
-    app.config.from_object('config.Config')
-    
-    app.register_blueprint(rick_and_mort_bp, url_prefix='/api')
-    
-    return app
 
-if __name__ == '__main__':
-    app = create_app()
+app = Flask(__name__)
+
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+
+app.register_blueprint(rick_and_morty_bp, url_prefix='/api')
+
+@app.route("/")
+def hello_world():
+    print('route')
+    return"<p>Hello</p>"
+
+if __name__ == "__main__":
     app.run(debug=True)
-    
